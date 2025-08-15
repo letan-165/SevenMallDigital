@@ -1,15 +1,23 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import React from "react";
+import { ChangeEvent, useState } from "react";
 
 interface TextFieldCusProps {
   label: string;
-  mb?: number
+  mb?: number;
   type?: "text" | "password" | "email" | "number";
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function TextFieldCus({ label, type = "text", mb = 2  }: TextFieldCusProps) {
-  const [showPassword, setShowPassword] = React.useState(false);
+export default function TextFieldCus({
+  label,
+  type = "text",
+  mb = 2,
+  value,
+  onChange,
+}: TextFieldCusProps) {
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -20,6 +28,8 @@ export default function TextFieldCus({ label, type = "text", mb = 2  }: TextFiel
       label={label}
       type={type === "password" ? (showPassword ? "text" : "password") : type}
       fullWidth
+      value={value}
+      onChange={onChange}
       sx={{ mb, bgcolor: "#E2E2E2" }}
       InputProps={
         type === "password"

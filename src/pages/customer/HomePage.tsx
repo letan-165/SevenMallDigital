@@ -1,15 +1,30 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 
+import { useEffect, useState } from "react";
+import { Product } from "../../apis/dto/Response";
+import ProductsService from "../../apis/services/ProductsService";
 import ListProduct from "../../components/atoms/ListProduct";
 import BannerCus from "../../components/molecules/homes/BannerCus";
-import ProductSlider, {
-  products,
-} from "../../components/molecules/homes/ProductSlider";
+import ProductSlider from "../../components/molecules/homes/ProductSlider";
 import FooterCus from "../../components/organisms/FooterCus";
 import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus";
 import NavigationBar from "../../components/organisms/NavigationBar";
+
 export function HomePage() {
-  const listProduct = products;
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setProducts((await ProductsService.findAll(1)).products);
+      } catch (error) {
+        alert("Lỗi hệ thống");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Box sx={{ fontFamily: "sans-serif", bgcolor: "#fff" }}>
       <HeaderCustomerCus />
@@ -28,7 +43,7 @@ export function HomePage() {
         </Typography>
         <Container sx={{ height: 4, bgcolor: "#FF6600" }} />
 
-        <ProductSlider />
+        <ProductSlider products={products} />
 
         <Container sx={{ mt: 5, height: 4, bgcolor: "black" }} />
         <Typography

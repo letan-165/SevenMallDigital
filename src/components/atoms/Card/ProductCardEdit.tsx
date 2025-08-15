@@ -1,7 +1,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { Product } from "../../molecules/homes/ProductSlider";
+import { Product } from "../../../apis/dto/Response";
 import EditProductDialog from "../Dialogs/EditProductDialog";
 
 export const ProductCardEdit = ({
@@ -30,7 +30,7 @@ export const ProductCardEdit = ({
       >
         <Box
           component="img"
-          src={product.img}
+          src={"/public/images/product1.png"}
           alt={product.name}
           sx={{ width: "100%", height: 220, objectFit: "cover" }}
         />
@@ -55,7 +55,7 @@ export const ProductCardEdit = ({
           justifyContent={"space-between"}
           sx={{ mt: 1, gap: 1, alignItems: "center" }}
         >
-          <Typography fontWeight="bold">{product.newPrice}</Typography>
+          <Typography fontWeight="bold">{product.price}</Typography>
           <DeleteIcon sx={{ color: "red" }} />
         </Stack>
       </Box>

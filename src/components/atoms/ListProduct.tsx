@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
+import { Product } from "../../apis/dto/Response";
 import ProductCard from "../atoms/Card/ProductCard";
-import { Product } from "../molecules/homes/ProductSlider";
 
 const ListProduct = ({
   products,

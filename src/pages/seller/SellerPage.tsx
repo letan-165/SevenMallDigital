@@ -1,10 +1,11 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Product } from "../../apis/dto/Response";
+import ProductsService from "../../apis/services/ProductsService";
 import { ProductCardEdit } from "../../components/atoms/Card/ProductCardEdit";
 import EditProductDialog from "../../components/atoms/Dialogs/EditProductDialog";
 import { ButtonLoginCus } from "../../components/atoms/Form/ButtonLoginCus";
 import { TextFieldInfoCus } from "../../components/atoms/Form/TextFieldInfoCus";
-import { products } from "../../components/molecules/homes/ProductSlider";
 import AvatarSection from "../../components/molecules/profile/form/AvatarSection";
 import FooterCus from "../../components/organisms/FooterCus";
 import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus";
@@ -12,6 +13,19 @@ import NavigationBar from "../../components/organisms/NavigationBar";
 
 const SellerPage = () => {
   const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setProducts((await ProductsService.findAll(1)).products);
+      } catch (error) {
+        alert("Lỗi hệ thống");
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Box sx={{ fontFamily: "sans-serif", bgcolor: "#fff" }}>
       <HeaderCustomerCus />

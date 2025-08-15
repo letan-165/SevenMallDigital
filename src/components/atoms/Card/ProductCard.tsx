@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../../Paths";
-import { Product } from "../../molecules/homes/ProductSlider";
+import { Product } from "../../../apis/dto/Response";
 
 const ProductCard = ({ key, product }: { key?: any; product: Product }) => {
   const navigate = useNavigate();
@@ -18,13 +18,14 @@ const ProductCard = ({ key, product }: { key?: any; product: Product }) => {
         bgcolor: "white",
         flexShrink: 0,
         display: "flex",
+        justifyContent: "center",
         flexDirection: "column",
-        cursor: "pointer"
+        cursor: "pointer",
       }}
     >
       <Box
         component="img"
-        src={product.img}
+        src={"/public/images/product1.png"}
         alt={product.name}
         sx={{ width: "100%", height: 220, objectFit: "cover" }}
       />
@@ -41,7 +42,7 @@ const ProductCard = ({ key, product }: { key?: any; product: Product }) => {
           fontSize: 12,
         }}
       >
-        -{product.discount}%
+        -{product.stock}%
       </Box>
 
       <Typography
@@ -64,10 +65,10 @@ const ProductCard = ({ key, product }: { key?: any; product: Product }) => {
           variant="body2"
           sx={{ textDecoration: "line-through", color: "#999" }}
         >
-          {product.oldPrice}
+          {product.price}
         </Typography>
         <Typography variant="body2" color="error" fontWeight="bold">
-          {product.newPrice}
+          {product.price}
         </Typography>
       </Box>
     </Box>
