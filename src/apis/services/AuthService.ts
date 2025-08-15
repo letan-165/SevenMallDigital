@@ -1,5 +1,4 @@
 import axiosClient from "../axiosClient";
-
 const API_AUTH = "auth";
 
 const AuthService = {
@@ -28,13 +27,8 @@ const AuthService = {
     }
   },
 
-  google: async () => {
-    try {
-      await axiosClient.post(`${API_AUTH}/google-login`);
-      return true;
-    } catch (e) {
-      return false;
-    }
+  google: async (code) => {
+    await axiosClient.post(`/auth/google-login`, { code });
   },
 };
 export default AuthService;

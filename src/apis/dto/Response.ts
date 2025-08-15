@@ -20,3 +20,10 @@ export interface ProductsResponse {
   products: Product[];
   totalPages: number;
 }
+
+export interface Profile {
+  userId: string;
+  email: string;
+  role: string;
+  iat: string;
+}

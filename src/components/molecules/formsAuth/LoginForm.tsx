@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../../apis/services/AuthService";
@@ -31,13 +32,21 @@ export function LoginForm({ setPage }: { setPage: (page) => void }) {
     }
   };
 
-  const handleLoginGoogle = async () => {
-    if (await AuthService.google()) {
-      navigate(Paths.HOME);
-    } else {
-      alert("Đăng nhập thất bại");
-    }
-  };
+  const handleLoginGoogle = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (tokenResponse) => {
+      try {
+        await AuthService.google(tokenResponse.code);
+        alert("Đăng nhập thành công");
+        navigate(Paths.HOME);
+      } catch (e) {
+        alert("Đăng nhập thất bại");
+        console.error(e);
+      }
+    },
+    onError: (e) => console.error(e),
+  });
+
   return (
     <>
       <Typography fontSize={30} fontWeight="bold" gutterBottom>
