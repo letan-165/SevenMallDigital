@@ -1,4 +1,5 @@
 import axiosClient from "../axiosClient";
+import { Profile } from "../dto/Response";
 const API_AUTH = "auth";
 
 const AuthService = {
@@ -19,7 +20,7 @@ const AuthService = {
     }
   },
 
-  profile: async () => {
+  profile: async (): Promise<Profile> => {
     try {
       return await axiosClient.get(`${API_AUTH}/profile`);
     } catch (e) {

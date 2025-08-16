@@ -12,14 +12,14 @@ import NavigationBar from "../../components/organisms/NavigationBar";
 const CategoryPage = () => {
   const items = ["Mục 1", "Mục 2", "Mục 3"];
   const items2 = ["Mới nhất", "Phổ biến", "Giá tăng dần", "Giá giảm dần"];
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setProducts((await ProductsService.findAll(1)).products);
-      } catch (error) {
-        alert("Lỗi hệ thống");
+      } catch (e) {
+        throw e;
       }
     };
 

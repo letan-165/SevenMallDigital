@@ -1,4 +1,10 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { Product } from "../../apis/dto/Response";
 import ProductsService from "../../apis/services/ProductsService";
@@ -13,14 +19,14 @@ import NavigationBar from "../../components/organisms/NavigationBar";
 
 const SellerPage = () => {
   const [open, setOpen] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setProducts((await ProductsService.findAll(1)).products);
-      } catch (error) {
-        alert("Lỗi hệ thống");
+      } catch (e) {
+        throw e;
       }
     };
 
@@ -54,18 +60,22 @@ const SellerPage = () => {
             />
           </Stack>
           {/* Danh sách sản phẩm */}
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: 2,
-              width: 1200,
-            }}
-          >
-            {products.map((product, index) => (
-              <ProductCardEdit key={index} product={product} />
-            ))}
-          </Box>
+          {!products ? (
+            <CircularProgress sx={{ mt: 2, mb: 2 }} />
+          ) : (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                gap: 2,
+                width: 1200,
+              }}
+            >
+              {products.map((product, index) => (
+                <ProductCardEdit key={index} product={product} />
+              ))}
+            </Box>
+          )}
         </Stack>
         <EditProductDialog open={open} setOpen={setOpen} />
       </Stack>

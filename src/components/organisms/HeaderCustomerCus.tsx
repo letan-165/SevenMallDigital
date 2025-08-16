@@ -9,13 +9,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Profile } from "../../apis/dto/Response";
+import AuthService from "../../apis/services/AuthService";
 import { Paths } from "../../Paths";
 import BoxRightHeader from "../molecules/header/BoxRightHeader";
 
 export function HeaderCustomerCus() {
   const navigate = useNavigate();
-  const isLogin = false;
+  const [profile, setProfile] = useState<Profile | null>(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      setProfile(await AuthService.profile());
+    };
+    fetchData();
+  }, []);
+
+  const isLogin = profile !== null;
   return (
     <Box
       sx={{

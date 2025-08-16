@@ -1,12 +1,12 @@
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Box, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
 import { useState } from "react";
 import ProductCard from "../../atoms/Card/ProductCard";
 
 export default function ProductSlider({ products }) {
   const [index, setIndex] = useState(0);
-  const maxIndex = 2; // max chỉ số có thể trượt
+  const maxIndex = 2;
 
   const prev = () => {
     setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
@@ -15,8 +15,9 @@ export default function ProductSlider({ products }) {
   const next = () => {
     setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
   };
-
-  return (
+  return products ? (
+    <CircularProgress sx={{ mt: 2, mb: 2 }} />
+  ) : (
     <Box
       sx={{
         width: 1300,

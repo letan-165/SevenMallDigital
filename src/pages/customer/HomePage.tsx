@@ -17,8 +17,8 @@ export function HomePage() {
     const fetchData = async () => {
       try {
         setProducts((await ProductsService.findAll(1)).products);
-      } catch (error) {
-        alert("Lỗi hệ thống");
+      } catch (e) {
+        throw e;
       }
     };
 

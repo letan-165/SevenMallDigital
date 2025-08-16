@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Paths } from "../../../Paths";
 import { Product } from "../../../apis/dto/Response";
 
-const ProductCard = ({ key, product }: { key?: any; product: Product }) => {
+const ProductCard = ({ product }: { product: Product }) => {
   const navigate = useNavigate();
   return (
     <Box
       onClick={() => navigate(Paths.PRODUCT)}
-      key={key}
       sx={{
         width: 220,
         border: "1px solid #ccc",

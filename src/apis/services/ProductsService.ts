@@ -8,7 +8,6 @@ const ProductsService = {
     try {
       return await axiosClient.get(`${API_PRODUCTS}?current=${current}`);
     } catch (e) {
-      alert("Lỗi hệ thống");
       throw e;
     }
   },

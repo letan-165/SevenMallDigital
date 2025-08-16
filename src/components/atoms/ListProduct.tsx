@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { Product } from "../../apis/dto/Response";
 import ProductCard from "../atoms/Card/ProductCard";
 
@@ -7,11 +7,13 @@ const ListProduct = ({
   paddingTop,
   width = "100%",
 }: {
-  products: Product[];
+  products?: Product[];
   paddingTop?: number;
   width?: number | string;
 }) => {
-  return (
+  return !products ? (
+    <CircularProgress sx={{ mt: 2, mb: 2 }} />
+  ) : (
     <Box
       sx={{
         display: "grid",

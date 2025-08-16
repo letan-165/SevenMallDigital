@@ -51,6 +51,16 @@ export default function Sidebar({ activeIndex, setPage }) {
         ))}
       </Box>
       <Typography sx={{ fontWeight: "bold", pt: 1 }}>Đơn mua</Typography>
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          pt: 1,
+          color: "red",
+          cursor: "pointer",
+        }}
+      >
+        Đăng xuất
+      </Typography>
     </Paper>
   );
 }

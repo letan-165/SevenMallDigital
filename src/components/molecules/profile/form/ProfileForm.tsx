@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   FormControlLabel,
   Paper,
   Radio,
@@ -8,11 +9,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
+import CloudinaryService from "../../../../apis/external/CloudinaryService";
 import { ButtonLoginCus } from "../../../atoms/Form/ButtonLoginCus";
 import { TextFieldInfoCus } from "../../../atoms/Form/TextFieldInfoCus";
 import AvatarSection from "./AvatarSection";
 
 export default function ProfileForm() {
+  const [file, setFile] = useState<File>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    const uploadedUrl = file && (await CloudinaryService.upload(file));
+    setLoading(false);
+    console.log(uploadedUrl);
+  };
   return (
     <Paper sx={{ p: 4 }}>
       <Typography variant="h5" gutterBottom>
@@ -55,9 +67,17 @@ export default function ProfileForm() {
             <TextField type="date" size="small" fullWidth />
           </Stack>
 
-          <ButtonLoginCus name="Lưu" width={"15%"} />
+          {loading ? (
+            <CircularProgress sx={{ mt: 2, mb: 2 }} />
+          ) : (
+            <ButtonLoginCus
+              name="Lưu"
+              width={"15%"}
+              onClick={() => handleSave()}
+            />
+          )}
         </Box>
-        <AvatarSection />
+        <AvatarSection setFile={setFile} />
       </Stack>
     </Paper>
   );

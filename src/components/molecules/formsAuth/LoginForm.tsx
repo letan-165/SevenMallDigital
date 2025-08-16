@@ -25,7 +25,6 @@ export function LoginForm({ setPage }: { setPage: (page) => void }) {
   const handleLogin = async () => {
     if (await AuthService.login(formData)) {
       alert("Đăng nhập thành công");
-      console.log(await AuthService.profile());
       navigate(Paths.HOME);
     } else {
       alert("Sai tài khoản hoặc mật khẩu");
