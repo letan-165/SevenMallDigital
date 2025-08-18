@@ -21,10 +21,11 @@ export function SignUpForm({ setPage }: { setPage: (page: string) => void }) {
   const handleSubmit = async () => {
     if (formData.password != confirmPassword) {
       alert("Mật khẩu không trùng khớp");
-      return
+      return;
     }
     if (await AuthService.register(formData)) {
       alert("Đăng kí thành công");
+      setPage("login");
     } else {
       alert("Đăng kí thất bại");
     }

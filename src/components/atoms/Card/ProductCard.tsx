@@ -2,12 +2,13 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../../Paths";
 import { Product } from "../../../apis/dto/Response";
+import { formatVND } from "../../util/formatVND";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const navigate = useNavigate();
   return (
     <Box
-      onClick={() => navigate(Paths.PRODUCT)}
+      onClick={() => navigate(`${Paths.PRODUCT}/${product._id}`)}
       sx={{
         width: 220,
         border: "1px solid #ccc",
@@ -28,21 +29,23 @@ const ProductCard = ({ product }: { product: Product }) => {
         alt={product.name}
         sx={{ width: "100%", height: 220, objectFit: "cover" }}
       />
-      <Box
-        sx={{
-          position: "absolute",
-          top: 8,
-          right: 8,
-          bgcolor: "orange",
-          color: "white",
-          px: 1,
-          borderRadius: "0 0 0 8px",
-          fontWeight: "bold",
-          fontSize: 12,
-        }}
-      >
-        -{product.stock}%
-      </Box>
+      {product.haveDiscount && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            bgcolor: "orange",
+            color: "white",
+            px: 1,
+            borderRadius: "0 0 0 8px",
+            fontWeight: "bold",
+            fontSize: 12,
+          }}
+        >
+          -{product.discountId?.value}%
+        </Box>
+      )}
 
       <Typography
         variant="body2"
@@ -60,14 +63,16 @@ const ProductCard = ({ product }: { product: Product }) => {
       </Typography>
 
       <Box sx={{ mt: 1, display: "flex", gap: 1, alignItems: "center" }}>
-        <Typography
-          variant="body2"
-          sx={{ textDecoration: "line-through", color: "#999" }}
-        >
-          {product.price}
-        </Typography>
+        {product.haveDiscount && (
+          <Typography
+            variant="body2"
+            sx={{ textDecoration: "line-through", color: "#999" }}
+          >
+            {formatVND(product.price)}
+          </Typography>
+        )}
         <Typography variant="body2" color="error" fontWeight="bold">
-          {product.price}
+          {formatVND(product.finalPrice)}
         </Typography>
       </Box>
     </Box>

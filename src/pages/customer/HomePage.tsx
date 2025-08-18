@@ -11,7 +11,7 @@ import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus"
 import NavigationBar from "../../components/organisms/NavigationBar";
 
 export function HomePage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => {
     const fetchData = async () => {

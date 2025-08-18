@@ -1,9 +1,19 @@
-import { Add, Remove } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
 import { Box, Checkbox, IconButton, Typography } from "@mui/material";
+import { CartItem } from "../../../apis/dto/Response";
+import CartService from "../../../apis/services/CartService";
 
-const ProductCartCard = ({ item, setItems }) => {
+const ProductCartCard = ({
+  item,
+  cartID,
+  setItems,
+}: {
+  item: CartItem;
+  cartID: string;
+  setItems: (item) => void;
+}) => {
   // Chọn / bỏ chọn 1 sản phẩm
-  const toggleSelectItem = (id: number) => {
+  const toggleSelectItem = (id) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, selected: !item.selected } : item
@@ -12,20 +22,18 @@ const ProductCartCard = ({ item, setItems }) => {
   };
 
   // Tăng / giảm số lượng sản phẩm
-  const changeQuantity = (id: number, delta: number) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          const newQty = item.quantity + delta;
-          return { ...item, quantity: newQty > 1 ? newQty : 1 };
-        }
-        return item;
-      })
-    );
+  const changeQuantity = async (id, quantity) => {
+    await CartService.updateQuantity(cartID, id, item.quantity + quantity);
   };
+
+  // Xóa sản phẩm khỏi giỏ
+  const removeItem = async (id) => {
+    await CartService.delete(cartID, id);
+  };
+
   return (
     <Box
-      key={item.id}
+      key={item.productId._id}
       display="flex"
       alignItems="center"
       bgcolor="white"
@@ -37,7 +45,7 @@ const ProductCartCard = ({ item, setItems }) => {
     >
       <Checkbox
         checked={item.selected}
-        onChange={() => toggleSelectItem(item.id)}
+        onChange={() => toggleSelectItem(item.productId._id)}
         sx={{
           color: item.selected ? "orange" : undefined,
           "&.Mui-checked": {
@@ -47,26 +55,25 @@ const ProductCartCard = ({ item, setItems }) => {
       />
       <Box
         component="img"
-        src={item.image}
-        alt={item.name}
+        src={"/public/images/product1.png"}
         sx={{ width: 80, height: 80, objectFit: "cover", borderRadius: 1 }}
       />
       <Box flex={1}>
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-          {item.name}
+          {item.productId.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Shop: {item.shop}
+          Shop: {item.productId.storeId.name}
         </Typography>
         <Box display="flex" alignItems="center" mt={0.5} gap={1}>
           <Typography
             variant="body2"
             sx={{ textDecoration: "line-through", color: "#999" }}
           >
-            {item.oldPrice.toLocaleString()} đ
+            {item.productId.price.toLocaleString()} đ
           </Typography>
           <Typography variant="body2" color="error" fontWeight="bold">
-            {item.newPrice.toLocaleString()} đ
+            {item.productId.finalPrice.toLocaleString()} đ
           </Typography>
         </Box>
       </Box>
@@ -81,7 +88,7 @@ const ProductCartCard = ({ item, setItems }) => {
       >
         <IconButton
           size="small"
-          onClick={() => changeQuantity(item.id, -1)}
+          onClick={() => changeQuantity(item.productId._id, -1)}
           disabled={item.quantity === 1}
         >
           <Remove />
@@ -89,7 +96,10 @@ const ProductCartCard = ({ item, setItems }) => {
         <Typography variant="body2" sx={{ width: 24, textAlign: "center" }}>
           {item.quantity}
         </Typography>
-        <IconButton size="small" onClick={() => changeQuantity(item.id, 1)}>
+        <IconButton
+          size="small"
+          onClick={() => changeQuantity(item.productId._id, 1)}
+        >
           <Add />
         </IconButton>
       </Box>
@@ -101,8 +111,13 @@ const ProductCartCard = ({ item, setItems }) => {
         fontWeight="bold"
         sx={{ ml: 2, minWidth: 80, textAlign: "right" }}
       >
-        {(item.newPrice * item.quantity).toLocaleString()} đ
+        {(item.productId.price * item.quantity).toLocaleString()} đ
       </Typography>
+
+      {/* Icon xóa */}
+      <IconButton onClick={() => removeItem(item.productId._id)} color="error">
+        <Delete />
+      </IconButton>
     </Box>
   );
 };

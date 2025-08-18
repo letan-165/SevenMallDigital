@@ -14,16 +14,20 @@ import AuthService from "../../../apis/services/AuthService";
 import { Paths } from "../../../Paths";
 import { ButtonLoginCus } from "../../atoms/Form/ButtonLoginCus";
 import TextFieldCus from "../../atoms/Form/TextFieldCus";
+import LoadingCus from "../../atoms/LoadingCus";
 
 export function LoginForm({ setPage }: { setPage: (page) => void }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     if (await AuthService.login(formData)) {
+      setLoading(false);
       alert("Đăng nhập thành công");
       navigate(Paths.HOME);
     } else {
@@ -71,11 +75,15 @@ export function LoginForm({ setPage }: { setPage: (page) => void }) {
         }}
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
-        <ButtonLoginCus
-          bgcolor="black"
-          name={"Đăng nhập"}
-          onClick={() => handleLogin()}
-        />
+        {loading ? (
+          <LoadingCus />
+        ) : (
+          <ButtonLoginCus
+            bgcolor="black"
+            name={"Đăng nhập"}
+            onClick={() => handleLogin()}
+          />
+        )}
         <ButtonLoginCus name={"Đăng kí"} onClick={() => setPage("signup")} />
       </Stack>
 

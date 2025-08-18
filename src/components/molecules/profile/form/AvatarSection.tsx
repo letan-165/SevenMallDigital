@@ -2,7 +2,7 @@ import { Person, PhotoCamera } from "@mui/icons-material";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { useState } from "react";
 
-export default function AvatarSection({ setFile }) {
+export default function AvatarSection({ setFile, image }) {
   const [preview, setPreview] = useState<string>("");
 
   const handleSelect = (file: File) => {
@@ -31,7 +31,7 @@ export default function AvatarSection({ setFile }) {
 
       {/* Avatar Preview */}
       <Avatar
-        src={preview || ""}
+        src={preview || image}
         sx={{ width: 100, height: 100, bgcolor: "grey.300", mb: 2 }}
       >
         {!preview && <Person sx={{ fontSize: 50 }} />}

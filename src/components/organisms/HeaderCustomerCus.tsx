@@ -25,7 +25,7 @@ export function HeaderCustomerCus() {
     };
     fetchData();
   }, []);
-
+  profile && localStorage.setItem("userID", profile.userId);
   const isLogin = profile !== null;
   return (
     <Box

@@ -1,30 +1,46 @@
-import {
-  Box,
-  CircularProgress,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { User } from "../../../../apis/dto/Response";
 import CloudinaryService from "../../../../apis/external/CloudinaryService";
+import UserService from "../../../../apis/services/UserService";
 import { ButtonLoginCus } from "../../../atoms/Form/ButtonLoginCus";
 import { TextFieldInfoCus } from "../../../atoms/Form/TextFieldInfoCus";
 import AvatarSection from "./AvatarSection";
 
-export default function ProfileForm() {
+export default function ProfileForm({ user }: { user: User }) {
   const [file, setFile] = useState<File>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [request, setRequest] = useState({
+    username: user.username,
+    name: user.name,
+    email: user.email,
+    avatar: user.avatar,
+    phone: user.phone,
+  });
 
   const handleSave = async () => {
     setLoading(true);
-    const uploadedUrl = file && (await CloudinaryService.upload(file));
+
+    let uploadedUrl;
+    if (file) {
+      uploadedUrl = await CloudinaryService.upload(file);
+    }
+
+    // tạo object mới có avatar cập nhật
+    const updatedRequest = {
+      ...request,
+      avatar: uploadedUrl || request.avatar,
+    };
+
+    await UserService.save(updatedRequest);
+
+    // sau khi lưu thành công mới set lại state
+    setRequest(updatedRequest);
+
     setLoading(false);
-    console.log(uploadedUrl);
+    console.log(updatedRequest);
   };
+
   return (
     <Paper sx={{ p: 4 }}>
       <Typography variant="h5" gutterBottom>
@@ -36,36 +52,27 @@ export default function ProfileForm() {
 
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Box width={"80%"}>
-          <TextFieldInfoCus label="Tên đăng nhập" />
-          <TextFieldInfoCus label="Tên người dùng" />
-          <TextFieldInfoCus label="Số điện thoại" />
-          <TextFieldInfoCus label="Email" type="email" />
-          <TextFieldInfoCus label="Địa chỉ" />
-
-          {/* Gender */}
-          <Stack direction={"row"} mb={3} alignItems={"center"} gap={12}>
-            <Typography variant="body2" fontWeight="medium" mb={1}>
-              Giới tính:
-            </Typography>
-            <RadioGroup row>
-              {["Nam", "Nữ", "Khác"].map((g) => (
-                <FormControlLabel
-                  key={g}
-                  value={g}
-                  control={<Radio size="small" />}
-                  label={g}
-                />
-              ))}
-            </RadioGroup>
-          </Stack>
-
-          {/* Birth Date */}
-          <Stack direction={"row"} mb={3} alignItems={"center"} gap={12}>
-            <Typography variant="body2" fontWeight="medium" mb={1}>
-              Ngày sinh;
-            </Typography>
-            <TextField type="date" size="small" fullWidth />
-          </Stack>
+          <TextFieldInfoCus
+            label="Tên đăng nhập"
+            value={request.username}
+            onChange={(val) => setRequest({ ...request, username: val })}
+          />
+          <TextFieldInfoCus
+            label="Tên người dùng"
+            value={request.name}
+            onChange={(val) => setRequest({ ...request, name: val })}
+          />
+          <TextFieldInfoCus
+            label="Số điện thoại"
+            value={request.phone}
+            onChange={(val) => setRequest({ ...request, phone: val })}
+          />
+          <TextFieldInfoCus
+            label="Email"
+            type="email"
+            value={request.email}
+            onChange={(val) => setRequest({ ...request, email: val })}
+          />
 
           {loading ? (
             <CircularProgress sx={{ mt: 2, mb: 2 }} />
@@ -77,7 +84,7 @@ export default function ProfileForm() {
             />
           )}
         </Box>
-        <AvatarSection setFile={setFile} />
+        <AvatarSection setFile={setFile} image={request.avatar} />
       </Stack>
     </Paper>
   );

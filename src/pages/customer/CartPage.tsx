@@ -5,56 +5,30 @@ import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus"
 import NavigationBar from "../../components/organisms/NavigationBar";
 
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Cart, CartItem } from "../../apis/dto/Response";
+import CartService from "../../apis/services/CartService";
 import { ButtonLoginCus } from "../../components/atoms/Form/ButtonLoginCus";
 import ConfirmCart from "../../components/molecules/cart/ConfirmCart";
 import PaymentCart from "../../components/molecules/cart/PaymentCart";
-interface Item {
-  id: number;
-  name: string;
-  shop: string;
-  oldPrice: number;
-  newPrice: number;
-  quantity: number;
-  image: string;
-  selected: boolean;
-}
 
 const CartPage = () => {
   const [page, setPage] = useState(0);
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: 1,
-      name: "Giày thể thao nữ Jintu 2 phối màu trắng hồng/kem cam vải mềm thoáng chân",
-      shop: "Lê Minh Tân - Đa cấp",
-      oldPrice: 590000,
-      newPrice: 420000,
-      quantity: 1,
-      image: "/images/product1.png",
-      selected: false,
-    },
-    {
-      id: 2,
-      name: "Giày thể thao nữ Jintu 2 phối màu trắng hồng/kem cam vải mềm thoáng chân",
-      shop: "Lê Minh Tân - Đa cấp",
-      oldPrice: 590000,
-      newPrice: 420000,
-      quantity: 1,
-      image: "/images/product1.png",
-      selected: false,
-    },
-    {
-      id: 3,
-      name: "Giày thể thao nữ Jintu 2 phối màu trắng hồng/kem cam vải mềm thoáng chân",
-      shop: "Lê Minh Tân - Đa cấp",
-      oldPrice: 590000,
-      newPrice: 420000,
-      quantity: 1,
-      image: "/images/product1.png",
-      selected: false,
-    },
-  ]);
+  const [cart, setCard] = useState<Cart>();
+  const [items, setItems] = useState<CartItem[]>(cart?.items || []);
   const itemsIsSelect = items.filter((item) => item.selected);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userID = localStorage.getItem("userID");
+        userID && setCard(await CartService.get(userID));
+      } catch (error) {
+        throw error;
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <Box sx={{ fontFamily: "sans-serif", bgcolor: "#fff" }}>
       <HeaderCustomerCus />
@@ -62,7 +36,9 @@ const CartPage = () => {
       <Stack alignItems={"center"}>
         <Box width={1200} mt={5}>
           <HeaderCart indexPage={page} setPage={setPage} />
-          {page === 0 && <DefaultCart items={items} setItems={setItems} />}
+          {page === 0 && items && (
+            <DefaultCart cart={cart} setItems={setItems} />
+          )}
           {page === 1 && (
             <ConfirmCart items={itemsIsSelect} setPage={setPage} />
           )}

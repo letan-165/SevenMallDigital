@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Product } from "../../apis/dto/Response";
+import { Category, Product } from "../../apis/dto/Response";
+import CategoryService from "../../apis/services/CategoryService";
 import ProductsService from "../../apis/services/ProductsService";
 import ListCheckBoxTestCus from "../../components/atoms/ListCheckBoxTextCus";
 import ListProduct from "../../components/atoms/ListProduct";
@@ -13,18 +14,23 @@ const CategoryPage = () => {
   const items = ["Mục 1", "Mục 2", "Mục 3"];
   const items2 = ["Mới nhất", "Phổ biến", "Giá tăng dần", "Giá giảm dần"];
   const [products, setProducts] = useState<Product[]>();
-
+  const [categories, setCategories] = useState<Category[]>();
+  const categoriesName = categories?.map((c) => c.name) || [];
+  const categoriesTags = categories?.flatMap((c) => c.tags) || [];
   useEffect(() => {
     const fetchData = async () => {
       try {
         setProducts((await ProductsService.findAll(1)).products);
+        setCategories((await CategoryService.findAll(1, 10)).category);
       } catch (e) {
         throw e;
       }
     };
 
+    console.log("tan", categories);
     fetchData();
   }, []);
+
   return (
     <Box sx={{ fontFamily: "sans-serif", bgcolor: "#fff" }}>
       <HeaderCustomerCus />
@@ -36,9 +42,9 @@ const CategoryPage = () => {
           borderRight={"3px solid grey"}
           alignItems={"center"}
         >
-          <ListTextCus title="DANH MỤC" items={items} />
+          <ListTextCus title="DANH MỤC" items={categoriesName} />
           <ListCheckBoxTestCus title={"Dịch vụ khuyến mãi"} items={items} />
-          <ListCheckBoxTestCus title={"Gợi ý thẻ hot"} items={items} />
+          <ListCheckBoxTestCus title={"Gợi ý thẻ hot"} items={categoriesTags} />
         </Stack>
         <Stack width="80%" p={1} sx={{ position: "relative" }}>
           <Box sx={{ position: "absolute", top: 0, right: 0, zIndex: 999 }}>

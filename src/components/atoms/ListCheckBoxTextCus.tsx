@@ -7,6 +7,7 @@ import {
   ListSubheader,
 } from "@mui/material";
 import { useState } from "react";
+import LoadingCus from "../atoms/LoadingCus";
 
 export default function ListCheckBoxTestCus({ title, items }) {
   const [checked, setChecked] = useState<string[]>([]);
@@ -24,7 +25,9 @@ export default function ListCheckBoxTestCus({ title, items }) {
     setChecked(newChecked);
   };
 
-  return (
+  return items ? (
+    <LoadingCus />
+  ) : (
     <List
       subheader={
         <ListSubheader sx={{ fontWeight: "bold", color: "black" }}>

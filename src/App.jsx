@@ -22,7 +22,7 @@ export default function App() {
         <Route path={Paths.INTRODUCE} element={<IntroducePage />} />
         <Route path={Paths.LOGIN} element={<LoginPage />} />
         <Route path={Paths.PROFILE} element={<ProfilePage />} />
-        <Route path={Paths.PRODUCT} element={<ProductPage />} />
+        <Route path={`${Paths.PRODUCT}/:productID`} element={<ProductPage />} />
         <Route path={Paths.CART} element={<CartPage />} />
         <Route path={Paths.SELLER_SIGN_UP} element={<SellerSignUp />} />
         <Route path={Paths.SELLER} element={<SellerPage />} />
