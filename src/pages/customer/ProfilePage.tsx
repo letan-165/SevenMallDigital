@@ -8,6 +8,9 @@ import LocationProfile from "../../components/molecules/profile/location/Locatio
 import Sidebar from "../../components/molecules/profile/Sidebar";
 import FooterCus from "../../components/organisms/FooterCus";
 import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus";
+import NavigationBar from "../../components/organisms/NavigationBar";
+import ChangePassPage from "./ChangePassPage";
+import OrderCustomerPage from "./OrderCustomerPage";
 
 export default function ProfilePage() {
   const [page, setPage] = useState(0);
@@ -30,13 +33,16 @@ export default function ProfilePage() {
   ) : (
     <Stack>
       <HeaderCustomerCus />
+      <NavigationBar activeIndex={5} />
       <Stack direction={"row"} gap={3} justifyContent={"center"} p={3}>
         <Box width={"15%"}>
-          <Sidebar activeIndex={page} setPage={setPage} />
+          <Sidebar user={user} activeIndex={page} setPage={setPage} />
         </Box>
         <Box sx={{ width: "70%" }}>
           {page === 0 && <ProfileForm user={user} />}
           {page === 1 && <LocationProfile />}
+          {page === 2 && <ChangePassPage />}
+          {page === 3 && <OrderCustomerPage />}
         </Box>
       </Stack>
       <FooterCus />

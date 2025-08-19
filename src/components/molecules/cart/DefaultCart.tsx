@@ -1,15 +1,7 @@
 import { Box, Checkbox, Typography } from "@mui/material";
-import { Cart } from "../../../apis/dto/Response";
 import ProductCartCard from "../../atoms/Card/ProductCartCard";
 
-export default function DefaultCart({
-  cart,
-  setItems,
-}: {
-  cart?: Cart;
-  setItems: (item) => void;
-}) {
-  const items = cart?.items || [];
+export default function DefaultCart({ cartID, items, setItems }) {
   // Chọn tất cả
   const selectAll = () => {
     setItems((prev) => prev.map((item) => ({ ...item, selected: true })));
@@ -80,11 +72,7 @@ export default function DefaultCart({
 
       {/* Danh sách sản phẩm */}
       {items.map((item) => (
-        <ProductCartCard
-          item={item}
-          setItems={setItems}
-          cartID={cart?._id || ""}
-        />
+        <ProductCartCard item={item} setItems={setItems} cartID={cartID} />
       ))}
     </Box>
   );

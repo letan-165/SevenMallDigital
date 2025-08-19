@@ -16,7 +16,7 @@ const ProductCartCard = ({
   const toggleSelectItem = (id) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, selected: !item.selected } : item
+        item.productId._id === id ? { ...item, selected: !item.selected } : item
       )
     );
   };
@@ -24,6 +24,7 @@ const ProductCartCard = ({
   // Tăng / giảm số lượng sản phẩm
   const changeQuantity = async (id, quantity) => {
     await CartService.updateQuantity(cartID, id, item.quantity + quantity);
+    window.location.reload();
   };
 
   // Xóa sản phẩm khỏi giỏ
@@ -111,7 +112,7 @@ const ProductCartCard = ({
         fontWeight="bold"
         sx={{ ml: 2, minWidth: 80, textAlign: "right" }}
       >
-        {(item.productId.price * item.quantity).toLocaleString()} đ
+        {(item.productId.finalPrice * item.quantity).toLocaleString()} đ
       </Typography>
 
       {/* Icon xóa */}

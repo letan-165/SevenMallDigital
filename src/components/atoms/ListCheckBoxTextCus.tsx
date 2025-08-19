@@ -25,7 +25,7 @@ export default function ListCheckBoxTestCus({ title, items }) {
     setChecked(newChecked);
   };
 
-  return items ? (
+  return !items ? (
     <LoadingCus />
   ) : (
     <List

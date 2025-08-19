@@ -1,10 +1,11 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { CartItem } from "../../../apis/dto/Response";
 
-const ConfirmCartCard = ({ item }) => {
+const ConfirmCartCard = ({ item }: { item: CartItem }) => {
   return (
     <Stack
       direction={"row"}
-      key={item.id}
+      key={item.productId._id}
       alignItems="center"
       bgcolor="white"
       boxShadow={1}
@@ -17,15 +18,15 @@ const ConfirmCartCard = ({ item }) => {
       {/* Ảnh */}
       <Box
         component="img"
-        src={item.image}
-        alt={item.name}
+        src={"/public/images/product1.png"}
+        alt={item.productId.name}
         sx={{ width: 80, height: 80, objectFit: "cover", borderRadius: 1 }}
       />
 
       {/* thông tin */}
       <Box flex={5}>
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-          {item.name}
+          {item.productId.name}
         </Typography>
         <Stack
           direction="row"
@@ -34,17 +35,17 @@ const ConfirmCartCard = ({ item }) => {
           gap={1}
         >
           <Typography variant="body2" color="text.secondary">
-            Shop: {item.shop}
+            Shop: {item.productId.storeId.name}
           </Typography>
           <Stack direction={"row"} gap={5}>
             <Typography
               variant="body2"
               sx={{ textDecoration: "line-through", color: "#999" }}
             >
-              {item.oldPrice.toLocaleString()} đ
+              {item.productId.price.toLocaleString()} đ
             </Typography>
             <Typography variant="body2" color="error" fontWeight="bold">
-              {item.newPrice.toLocaleString()} đ
+              {item.productId.finalPrice.toLocaleString()} đ
             </Typography>
           </Stack>
         </Stack>
@@ -67,7 +68,7 @@ const ConfirmCartCard = ({ item }) => {
         fontWeight="bold"
         sx={{ ml: 2, minWidth: 80, textAlign: "right" }}
       >
-        Tổng: {(item.newPrice * item.quantity).toLocaleString()} đ
+        Tổng: {(item.productId.finalPrice * item.quantity).toLocaleString()} đ
       </Typography>
     </Stack>
   );

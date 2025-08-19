@@ -1,28 +1,42 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import { CartItem } from "../../../apis/dto/Response";
 import ConfirmCartCard from "../../atoms/Card/ConfirmCartCard";
 import { ButtonLoginCus } from "../../atoms/Form/ButtonLoginCus";
 
-const ConfirmCart = ({ items, setPage }) => {
+const ConfirmCart = ({
+  items,
+  setPage,
+}: {
+  items: CartItem[];
+  setPage: (page) => void;
+}) => {
   const totalPrice = items.reduce(
-    (sum, item) => sum + item.oldPrice * item.quantity,
+    (sum, item) => sum + item.productId.price * item.quantity,
     0
   );
   const discount = items.reduce(
-    (sum, item) => sum + (item.oldPrice - item.newPrice) * item.quantity,
+    (sum, item) =>
+      sum + (item.productId.price - item.productId.finalPrice) * item.quantity,
     0
   );
 
-  const voucher = 0;
-  const saved = discount + voucher;
-  const finalTotal = totalPrice - saved;
+  const finalTotal = totalPrice - discount;
 
   const summaryData = [
     { label: "Tổng tiền hàng", value: `${totalPrice.toLocaleString()} đ` },
-    { label: "Voucher giảm giá", value: `${voucher.toLocaleString()} đ` },
     { label: "Giảm giá sản phẩm", value: `${discount.toLocaleString()} đ` },
-    { label: "Tiết kiệm", value: `${saved.toLocaleString()} đ` },
+    { label: "Tiết kiệm", value: `${discount.toLocaleString()} đ` },
     { label: "Tổng số tiền", value: `${finalTotal.toLocaleString()} đ` },
   ];
+
+  const paymentMethods = [
+    "Chuyển khoản ngân hàng",
+    "VNPay",
+    "Trả khi nhận hàng",
+  ];
+
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
   return (
     <Stack>
@@ -30,7 +44,9 @@ const ConfirmCart = ({ items, setPage }) => {
         {items.length === 0 ? (
           <Typography>Không có sản phẩm nào được chọn.</Typography>
         ) : (
-          items.map((item) => <ConfirmCartCard key={item.id} item={item} />)
+          items.map((item) => (
+            <ConfirmCartCard key={item.productId._id} item={item} />
+          ))
         )}
       </Box>
       {/* Thông tin giá tiền */}
@@ -41,10 +57,36 @@ const ConfirmCart = ({ items, setPage }) => {
           border: "1px solid black",
           bgcolor: "#F5F5F5",
           justifyContent: "space-between",
-          alignItems: "flex-end",
-          mx: 10,
+          alignItems: "center",
+          gap: 1,
         }}
       >
+        <Stack flex={1} padding={5}>
+          <Paper sx={{ p: 5, bgcolor: "#ffeccd", borderRadius: 2, flex: 1 }}>
+            <Typography sx={{ fontWeight: 600, mb: 2, fontSize: "1.1rem" }}>
+              Phương thức thanh toán
+            </Typography>
+            <Stack spacing={1} pt={1}>
+              {paymentMethods.map((method) => (
+                <Chip
+                  key={method}
+                  label={method}
+                  onClick={() => setSelectedPayment(method)}
+                  sx={{
+                    bgcolor: selectedPayment === method ? "#ff9900" : "#ffd190", // cam nếu chọn
+                    fontWeight: 500,
+                    height: 40,
+                    width: "100%",
+                    fontSize: "0.9rem",
+                    mb: 0.5,
+                    borderRadius: 1,
+                    cursor: "pointer",
+                  }}
+                />
+              ))}
+            </Stack>
+          </Paper>
+        </Stack>
         <Stack flex={1}>
           {summaryData.map((item, index) => (
             <Box
@@ -79,18 +121,14 @@ const ConfirmCart = ({ items, setPage }) => {
                 fontSize: 40,
               }}
             >
-              {summaryData[4].value}
+              {summaryData[3].value}
             </Typography>
           </Box>
         </Stack>
       </Stack>
 
       <Stack alignItems={"flex-end"} mt={5} mr={5}>
-        <ButtonLoginCus
-          name="Đặt hàng"
-          width={"15%"}
-          onClick={() => setPage(2)}
-        />
+        <ButtonLoginCus name="Thanh toán" width={"15%"} onClick={() => {}} />
       </Stack>
     </Stack>
   );

@@ -11,7 +11,7 @@ import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus"
 import NavigationBar from "../../components/organisms/NavigationBar";
 
 const CategoryPage = () => {
-  const items = ["Mục 1", "Mục 2", "Mục 3"];
+  const items1 = ["Sắp hết giảm giá", "Giảm sâu", "10%", "30%", "15%"];
   const items2 = ["Mới nhất", "Phổ biến", "Giá tăng dần", "Giá giảm dần"];
   const [products, setProducts] = useState<Product[]>();
   const [categories, setCategories] = useState<Category[]>();
@@ -21,13 +21,12 @@ const CategoryPage = () => {
     const fetchData = async () => {
       try {
         setProducts((await ProductsService.findAll(1)).products);
-        setCategories((await CategoryService.findAll(1, 10)).category);
+        setCategories((await CategoryService.findAll(1, 10)).categories);
       } catch (e) {
-        throw e;
+        console.error(e);
       }
     };
 
-    console.log("tan", categories);
     fetchData();
   }, []);
 
@@ -43,7 +42,7 @@ const CategoryPage = () => {
           alignItems={"center"}
         >
           <ListTextCus title="DANH MỤC" items={categoriesName} />
-          <ListCheckBoxTestCus title={"Dịch vụ khuyến mãi"} items={items} />
+          <ListCheckBoxTestCus title={"Dịch vụ khuyến mãi"} items={items1} />
           <ListCheckBoxTestCus title={"Gợi ý thẻ hot"} items={categoriesTags} />
         </Stack>
         <Stack width="80%" p={1} sx={{ position: "relative" }}>

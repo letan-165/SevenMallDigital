@@ -40,7 +40,7 @@ export interface ProductsResponse {
 }
 
 export interface CategoryResponse {
-  category: Category[];
+  categories: Category[];
   totalPages: number;
 }
 
@@ -63,8 +63,7 @@ export interface User {
 export interface CartItem {
   productId: Product;
   quantity: number;
-
-  selected: boolean | false;
+  selected: boolean;
 }
 
 export interface Cart {

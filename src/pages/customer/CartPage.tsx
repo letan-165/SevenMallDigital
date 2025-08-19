@@ -6,22 +6,30 @@ import NavigationBar from "../../components/organisms/NavigationBar";
 
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { useEffect, useState } from "react";
-import { Cart, CartItem } from "../../apis/dto/Response";
+import { Cart, CartItem, User } from "../../apis/dto/Response";
 import CartService from "../../apis/services/CartService";
+import UserService from "../../apis/services/UserService";
 import { ButtonLoginCus } from "../../components/atoms/Form/ButtonLoginCus";
+import LoadingCus from "../../components/atoms/LoadingCus";
 import ConfirmCart from "../../components/molecules/cart/ConfirmCart";
-import PaymentCart from "../../components/molecules/cart/PaymentCart";
 
 const CartPage = () => {
   const [page, setPage] = useState(0);
   const [cart, setCard] = useState<Cart>();
-  const [items, setItems] = useState<CartItem[]>(cart?.items || []);
+  const [items, setItems] = useState<CartItem[]>([]);
   const itemsIsSelect = items.filter((item) => item.selected);
+  const userID = localStorage.getItem("userID");
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userID = localStorage.getItem("userID");
-        userID && setCard(await CartService.get(userID));
+        const res = await CartService.get(userID);
+        userID && setCard(res);
+        setItems(
+          (res.items || []).map((it) => ({
+            ...it,
+            selected: it.selected ?? false,
+          }))
+        );
       } catch (error) {
         throw error;
       }
@@ -35,15 +43,12 @@ const CartPage = () => {
       <NavigationBar activeIndex={5} />
       <Stack alignItems={"center"}>
         <Box width={1200} mt={5}>
-          <HeaderCart indexPage={page} setPage={setPage} />
+          <HeaderCart userID={userID} indexPage={page} setPage={setPage} />
           {page === 0 && items && (
-            <DefaultCart cart={cart} setItems={setItems} />
+            <DefaultCart cartID={cart?._id} items={items} setItems={setItems} />
           )}
           {page === 1 && (
             <ConfirmCart items={itemsIsSelect} setPage={setPage} />
-          )}
-          {page === 2 && (
-            <PaymentCart items={itemsIsSelect} setPage={setPage} />
           )}
         </Box>
       </Stack>
@@ -52,7 +57,19 @@ const CartPage = () => {
   );
 };
 
-const HeaderCart = ({ indexPage, setPage }) => {
+const HeaderCart = ({ userID, indexPage, setPage }) => {
+  const [user, setUser] = useState<User>();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        userID && setUser(await UserService.findById(userID));
+      } catch (e) {
+        throw e;
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Stack direction={"row"} alignItems={"center"} gap={10}>
       <Stack
@@ -87,20 +104,22 @@ const HeaderCart = ({ indexPage, setPage }) => {
           onClick={() => setPage(1)}
         />
       )}
-      {indexPage === 2 && (
+      {indexPage === 1 && user ? (
         <Stack>
           <Stack direction={"row"} gap={20}>
             <Typography sx={{ color: "black", p: 0 }}>
-              <b>Tên:</b> abc
+              <b>Tên:</b> {user.name}
             </Typography>
             <Typography sx={{ color: "black", p: 0 }}>
-              <b>Số điện thoại:</b> 0123
+              <b>Số điện thoại:</b> {user.phone}
             </Typography>
           </Stack>
           <Typography sx={{ color: "black", p: 0 }}>
-            <b>Địa chỉ:</b> abc@ads
+            <b>Địa chỉ:</b> {user.address}
           </Typography>
         </Stack>
+      ) : (
+        <LoadingCus />
       )}
     </Stack>
   );

@@ -1,4 +1,5 @@
 import { Person } from "@mui/icons-material";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import {
   Avatar,
   Box,
@@ -8,18 +9,18 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function Sidebar({ activeIndex, setPage }) {
+export default function Sidebar({ user, activeIndex, setPage }) {
   const sidebarItems = ["Hồ sơ", "Địa chỉ", "Đổi mật khẩu"];
 
   return (
     <Paper sx={{ p: 2 }}>
       {/* Header */}
       <Box display="flex" alignItems="center" mb={2}>
-        <Avatar sx={{ mr: 2 }}>
+        <Avatar src={user.avatar || undefined} sx={{ mr: 2 }}>
           <Person />
         </Avatar>
         <Box>
-          <Typography fontWeight="bold">Letan</Typography>
+          <Typography fontWeight="bold">{user.name}</Typography>
           <Typography
             variant="caption"
             color="primary"
@@ -31,7 +32,12 @@ export default function Sidebar({ activeIndex, setPage }) {
       </Box>
       <Stack direction={"row"} gap={1}>
         <Person />
-        <Typography sx={{ fontWeight: "bold" }}>Tài khoản của tôi</Typography>
+        <Typography
+          onClick={() => setPage(0)}
+          sx={{ fontWeight: "bold", cursor: "pointer" }}
+        >
+          Tài khoản của tôi
+        </Typography>
       </Stack>
       {/* Menu Items */}
       <Box display="flex" flexDirection="column" gap={0.5}>
@@ -50,7 +56,15 @@ export default function Sidebar({ activeIndex, setPage }) {
           </ButtonBase>
         ))}
       </Box>
-      <Typography sx={{ fontWeight: "bold", pt: 1 }}>Đơn mua</Typography>
+      <Stack direction={"row"} gap={1}>
+        <ShoppingBagIcon />
+        <Typography
+          onClick={() => setPage(3)}
+          sx={{ fontWeight: "bold", cursor: "pointer" }}
+        >
+          Đơn mua
+        </Typography>
+      </Stack>
       <Typography
         sx={{
           fontWeight: "bold",
