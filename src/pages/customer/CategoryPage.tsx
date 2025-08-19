@@ -31,7 +31,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setProducts((await ProductsService.findAll(1)).products);
+        setProducts((await ProductsService.findAll(1, 30)).products);
         setCategories((await CategoryService.findAll(1, 10)).categories);
       } catch (e) {
         console.error(e);

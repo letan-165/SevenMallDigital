@@ -75,7 +75,7 @@ const SellerPage = () => {
               }}
             >
               {products.map((product, index) => (
-                <ProductCard key={index} product={product} isEdit />
+                <ProductCard key={index} product={product} isEdit={true} />
               ))}
             </Box>
           )}

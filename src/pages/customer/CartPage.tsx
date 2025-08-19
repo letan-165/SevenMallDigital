@@ -104,22 +104,26 @@ const HeaderCart = ({ userID, indexPage, setPage }) => {
           onClick={() => setPage(1)}
         />
       )}
-      {indexPage === 1 && user ? (
+      {indexPage === 1 && (
         <Stack>
-          <Stack direction={"row"} gap={20}>
-            <Typography sx={{ color: "black", p: 0 }}>
-              <b>Tên:</b> {user.name}
-            </Typography>
-            <Typography sx={{ color: "black", p: 0 }}>
-              <b>Số điện thoại:</b> {user.phone}
-            </Typography>
-          </Stack>
-          <Typography sx={{ color: "black", p: 0 }}>
-            <b>Địa chỉ:</b> {user.address}
-          </Typography>
+          {user ? (
+            <>
+              <Stack direction={"row"} gap={20}>
+                <Typography sx={{ color: "black", p: 0 }}>
+                  <b>Tên:</b> {user.name}
+                </Typography>
+                <Typography sx={{ color: "black", p: 0 }}>
+                  <b>Số điện thoại:</b> {user.phone}
+                </Typography>
+              </Stack>
+              <Typography sx={{ color: "black", p: 0 }}>
+                <b>Địa chỉ:</b> {user.address}
+              </Typography>
+            </>
+          ) : (
+            <LoadingCus />
+          )}
         </Stack>
-      ) : (
-        <LoadingCus />
       )}
     </Stack>
   );

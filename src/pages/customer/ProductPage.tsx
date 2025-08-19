@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../apis/dto/Response";
 import ProductsService from "../../apis/services/ProductsService";
+import LoadingCus from "../../components/atoms/LoadingCus";
 import ProductSlider from "../../components/molecules/homes/ProductSlider";
 import { DetailProduct } from "../../components/molecules/product/DetailProduct";
 import { InfoShop } from "../../components/molecules/product/InfoShop";
@@ -18,7 +19,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setProducts((await ProductsService.findAll(1)).products);
+        setProducts((await ProductsService.findAll(1, 8)).products);
       } catch (e) {
         throw e;
       }
@@ -43,10 +44,14 @@ const ProductPage = () => {
       <HeaderCustomerCus />
       <NavigationBar activeIndex={0} />
       <Stack width={"100%"} alignItems={"center"}>
-        <Box width={1200}>
-          <DetailProduct product={product} />
-          <InfoShop store={product?.storeId} />
-        </Box>
+        {!product ? (
+          <LoadingCus />
+        ) : (
+          <Box width={1200}>
+            <DetailProduct product={product} />
+            <InfoShop store={product?.storeId} />
+          </Box>
+        )}
         <Typography
           sx={{
             mt: 2,

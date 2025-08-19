@@ -56,7 +56,7 @@ const ProductCartCard = ({
       />
       <Box
         component="img"
-        src={"/public/images/product1.png"}
+        src={item.productId.images[0] || "/public/images/productInvalid.png"}
         sx={{ width: 80, height: 80, objectFit: "cover", borderRadius: 1 }}
       />
       <Box flex={1}>

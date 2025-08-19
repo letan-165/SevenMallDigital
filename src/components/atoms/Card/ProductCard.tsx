@@ -1,7 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Paths } from "../../../Paths";
 import { Product } from "../../../apis/dto/Response";
 import ProductsService from "../../../apis/services/ProductsService";
@@ -17,7 +16,6 @@ const ProductCard = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const handleDelete = async (productID) => {
     setLoading(true);
     await ProductsService.delete(productID);
@@ -27,7 +25,9 @@ const ProductCard = ({
     <>
       <Box
         onClick={() =>
-          isEdit ? setOpen(true) : navigate(`${Paths.PRODUCT}/${product._id}`)
+          isEdit
+            ? setOpen(true)
+            : (window.location.href = `${Paths.PRODUCT}/${product._id}`)
         }
         sx={{
           width: 220,
@@ -41,11 +41,12 @@ const ProductCard = ({
           justifyContent: "center",
           flexDirection: "column",
           cursor: "pointer",
+          borderRadius: 3,
         }}
       >
         <Box
           component="img"
-          src={"/public/images/product1.png"}
+          src={product.images[0] || "/public/images/productInvalid.png"}
           alt={product.name}
           sx={{ width: "100%", height: 220, objectFit: "cover" }}
         />
@@ -71,18 +72,24 @@ const ProductCard = ({
           variant="body2"
           sx={{
             mt: 1,
-            height: 60,
             overflow: "hidden",
-            display: "-webkit-box",
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical",
+            whiteSpace: "nowrap",
             textOverflow: "ellipsis",
+            fontWeight: "bold",
           }}
         >
           {product.name}
         </Typography>
 
-        <Box sx={{ mt: 1, display: "flex", gap: 1, alignItems: "center" }}>
+        <Box
+          sx={{
+            mt: 1,
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           {product.haveDiscount && (
             <Typography
               variant="body2"
@@ -94,7 +101,7 @@ const ProductCard = ({
           <Typography variant="body2" color="error" fontWeight="bold">
             {formatVND(product.finalPrice)}
           </Typography>
-          {isEdit && loading ? (
+          {loading ? (
             <LoadingCus />
           ) : (
             <DeleteIcon
@@ -102,7 +109,7 @@ const ProductCard = ({
                 e.stopPropagation();
                 handleDelete(product._id);
               }}
-              sx={{ color: "red" }}
+              sx={{ color: "red", display: !isEdit ? "none" : "block" }}
             />
           )}
         </Box>

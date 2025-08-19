@@ -18,7 +18,7 @@ const ConfirmCartCard = ({ item }: { item: CartItem }) => {
       {/* Ảnh */}
       <Box
         component="img"
-        src={"/public/images/product1.png"}
+        src={item.productId.images[0] || "/public/images/productInvalid.png"}
         alt={item.productId.name}
         sx={{ width: 80, height: 80, objectFit: "cover", borderRadius: 1 }}
       />

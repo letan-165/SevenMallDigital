@@ -16,7 +16,7 @@ export function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setProducts((await ProductsService.findAll(1)).products);
+        setProducts((await ProductsService.findAll(1, 20)).products);
       } catch (e) {
         throw e;
       }

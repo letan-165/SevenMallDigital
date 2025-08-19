@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Product } from "../../../apis/dto/Response";
 import CartService from "../../../apis/services/CartService";
 import { ButtonLoginCus } from "../../atoms/Form/ButtonLoginCus";
@@ -19,8 +18,6 @@ import LoadingCus from "../../atoms/LoadingCus";
 import { formatVND } from "../../util/formatVND";
 
 export const DetailProduct = ({ product }: { product: Product }) => {
-  const navigate = useNavigate();
-
   const [quantity, setQuantity] = useState(1);
 
   const handleDecrease = () => {
@@ -49,7 +46,7 @@ export const DetailProduct = ({ product }: { product: Product }) => {
         <Stack flex={2}>
           <Box
             component="img"
-            src={"/public/images/product1.png"}
+            src={product.images[0] || "/public/images/productInvalid.png"}
             sx={{ width: "100%" }}
           />
         </Stack>

@@ -86,15 +86,15 @@ const EditProductDialog = ({
       uploadedUrl = await CloudinaryService.upload(file);
     }
 
-    const updatedRequest = {
+    const updatedRequest: ProductRequest = {
       ...request,
-      images: uploadedUrl ? [uploadedUrl] : request.images[0],
+      images: uploadedUrl ? [uploadedUrl] : request.images,
     };
 
     if (product?._id) {
-      await ProductsService.update(product._id, request);
+      await ProductsService.update(product._id, updatedRequest);
     } else {
-      await ProductsService.save(request);
+      await ProductsService.save(updatedRequest);
     }
 
     window.location.reload();

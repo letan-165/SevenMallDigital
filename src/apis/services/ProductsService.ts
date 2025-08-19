@@ -19,9 +19,11 @@ const ProductsService = {
       throw e;
     }
   },
-  findAll: async (current): Promise<ProductsResponse> => {
+  findAll: async (current, pageSize): Promise<ProductsResponse> => {
     try {
-      return await axiosClient.get(`${API_PRODUCTS}?current=${current}`);
+      return await axiosClient.get(
+        `${API_PRODUCTS}?current=${current}&pageSize=${pageSize}`
+      );
     } catch (e) {
       throw e;
     }

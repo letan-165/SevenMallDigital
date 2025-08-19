@@ -28,7 +28,6 @@ export function LoginForm({ setPage }: { setPage: (page) => void }) {
     setLoading(true);
     if (await AuthService.login(formData)) {
       setLoading(false);
-      alert("Đăng nhập thành công");
       navigate(Paths.HOME);
     } else {
       alert("Sai tài khoản hoặc mật khẩu");

@@ -25,6 +25,7 @@ export default function ProductSlider({ products }) {
         position: "relative",
         overflow: "hidden",
         mx: "auto",
+        mt: 1,
       }}
     >
       <IconButton
@@ -60,8 +61,6 @@ export default function ProductSlider({ products }) {
           mx: "auto",
         }}
       >
-        {/* Container chứa các item trượt */}
-
         <Box
           sx={{
             display: "flex",
