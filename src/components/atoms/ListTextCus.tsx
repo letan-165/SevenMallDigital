@@ -1,28 +1,68 @@
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingCus from "../atoms/LoadingCus";
 
 export default function ListTextCus({
   title,
+  value,
   items,
+  onSelect,
 }: {
   title: string;
-  items?: string[];
+  value?: string;
+  items?: { id: string | undefined; text: string }[];
+  onSelect?: (id: string | undefined) => void; // callback khi chọn item
 }) {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (items && items.length > 0) {
+      let newSelected: string | undefined;
+      let newId: string | undefined;
+
+      if (value) {
+        const found = items.find((i) => i.id === value);
+        if (found) {
+          newSelected = found.text;
+          newId = found.id;
+        }
+      }
+
+      if (!newSelected) {
+        newSelected = items[0].text;
+        newId = items[0].id;
+      }
+
+      // chỉ setSelected khi khác giá trị hiện tại
+      if (newSelected !== selected) {
+        setSelected(newSelected);
+        if (newId) {
+          onSelect?.(newId); // gọi luôn callback khi set default
+        }
+      }
+    }
+  }, [items, value]);
+
   const handleClick = () => {
     setOpen(!open);
+  };
+
+  const handleSelect = (item: { id: string | undefined; text: string }) => {
+    setSelected(item.text);
+    onSelect?.(item.id);
+    setOpen(false); // đóng lại sau khi chọn
   };
 
   return !items ? (
     <LoadingCus />
   ) : (
-    <List sx={{ width: 170, bgcolor: "#ff6600", p: 0 }}>
+    <List sx={{ bgcolor: "#ff6600", p: 0 }}>
       <ListItemButton onClick={handleClick}>
         <ListItemText
-          primary={title}
+          primary={`${title}: ${selected ?? ""}`}
           primaryTypographyProps={{
             style: { fontSize: 14, color: "black", fontWeight: "bold" },
           }}
@@ -36,11 +76,20 @@ export default function ListTextCus({
 
       <Collapse in={open}>
         <List component="div" disablePadding>
-          {items.map((text, index) => (
-            <ListItemButton key={index} sx={{ pl: 4, bgcolor: "#f9c659" }}>
+          {items.map((item, index) => (
+            <ListItemButton
+              key={index}
+              sx={{
+                pl: 4,
+                bgcolor: selected === item.text ? "#ff9933" : "#f9c659",
+              }}
+              onClick={() => handleSelect(item)}
+            >
               <ListItemText
-                primary={text}
-                primaryTypographyProps={{ style: { color: "#000000" } }}
+                primary={item.text}
+                primaryTypographyProps={{
+                  style: { color: "#000000" },
+                }}
               />
             </ListItemButton>
           ))}

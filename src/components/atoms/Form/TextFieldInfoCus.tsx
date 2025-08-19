@@ -2,9 +2,9 @@ import { Stack, TextField, Typography } from "@mui/material";
 
 interface LabeledTextFieldProps {
   label: string;
-  value?: string;
+  value?: string | number;
   type?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value) => void;
   disabled?: boolean;
   placeholder?: string;
   helper?: string;
@@ -14,7 +14,7 @@ export function TextFieldInfoCus({
   label,
   value = "",
   type,
-  onChange = () => {},
+  onChange,
   disabled,
   placeholder,
 }: LabeledTextFieldProps) {
@@ -28,7 +28,7 @@ export function TextFieldInfoCus({
         value={value}
         disabled={disabled}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange && onChange(e.target.value)}
         sx={{ bgcolor: "white" }}
       />
     </Stack>

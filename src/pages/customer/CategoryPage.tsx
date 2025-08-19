@@ -12,11 +12,22 @@ import NavigationBar from "../../components/organisms/NavigationBar";
 
 const CategoryPage = () => {
   const items1 = ["Sắp hết giảm giá", "Giảm sâu", "10%", "30%", "15%"];
-  const items2 = ["Mới nhất", "Phổ biến", "Giá tăng dần", "Giá giảm dần"];
+  const items2 = [
+    { id: "1", text: "Mới nhất" },
+    { id: "2", text: "Phổ biến" },
+    { id: "3", text: "Giá tăng dần" },
+    { id: "4", text: "Giá giảm dần" },
+  ];
+
   const [products, setProducts] = useState<Product[]>();
   const [categories, setCategories] = useState<Category[]>();
-  const categoriesName = categories?.map((c) => c.name) || [];
   const categoriesTags = categories?.flatMap((c) => c.tags) || [];
+  const categoriesName =
+    categories?.map((c) => ({
+      id: c._id,
+      text: c.name,
+    })) || [];
+
   useEffect(() => {
     const fetchData = async () => {
       try {

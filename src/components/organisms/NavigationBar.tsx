@@ -1,7 +1,10 @@
 import LockIcon from "@mui/icons-material/Lock";
 import { Box, Button } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../Paths";
+import { Store } from "../../apis/dto/Response";
+import StoreService from "../../apis/services/StoreService";
 
 const NavigationBar = ({
   activeIndex,
@@ -10,7 +13,20 @@ const NavigationBar = ({
   activeIndex: number;
   role?: string;
 }) => {
-  const isSeller = true;
+  const [store, setStore] = useState<Store>();
+  const userID = localStorage.getItem("userID");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setStore(await StoreService.findByUserId(userID));
+      } catch (e) {
+        throw e;
+      }
+    };
+
+    fetchData();
+  }, []);
+  const isSeller = store ? true : false;
   const menuItems =
     role === "CUSTOMER"
       ? [

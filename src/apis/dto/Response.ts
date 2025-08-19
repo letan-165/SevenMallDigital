@@ -1,7 +1,10 @@
 export interface Discount {
   _id: string;
+  name: string;
   code: string;
   value: number;
+  startDate: string;
+  endDate: string;
 }
 
 export interface Category {
@@ -41,6 +44,10 @@ export interface ProductsResponse {
 
 export interface CategoryResponse {
   categories: Category[];
+  totalPages: number;
+}
+export interface DiscountResponse {
+  discounts: Discount[];
   totalPages: number;
 }
 
