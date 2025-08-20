@@ -3,8 +3,6 @@ export interface Discount {
   name: string;
   code: string;
   value: number;
-  startDate: string;
-  endDate: string;
 }
 
 export interface Category {
@@ -80,4 +78,28 @@ export interface Cart {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+export interface OrderItem {
+  productId: Product;
+  quantity: number;
+  price: number;
+}
+export interface Order {
+  _id: string;
+  userId: string;
+  sellerId: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: string;
+  createdAt: string;
+}
+
+export type OrderResponse = Order[];
+
+export interface PaymentResponse {
+  paymentId: string;
+  paymentUrl: string;
+  orderIds: string[];
+  amount: number;
+  txnRef: string;
 }

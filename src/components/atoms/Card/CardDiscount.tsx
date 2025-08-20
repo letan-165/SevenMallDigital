@@ -1,10 +1,31 @@
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
-const CardDiscount = ({ item, onClick }) => {
+import { useState } from "react";
+import { Discount } from "../../../apis/dto/Response";
+import DiscountService from "../../../apis/services/DiscountService";
+import LoadingCus from "../../atoms/LoadingCus";
+const CardDiscount = ({
+  discount,
+  onClick,
+}: {
+  discount: Discount;
+  onClick: () => void;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await DiscountService.delete(discount._id);
+    } catch (error) {
+      alert("Kiểm tra đăng nhập");
+      setLoading(false);
+    }
+    window.location.reload();
+  };
   return (
     <Stack
-      key={item.id}
+      key={discount._id}
       direction="row"
       alignItems="center"
       spacing={2}
@@ -17,23 +38,21 @@ const CardDiscount = ({ item, onClick }) => {
     >
       <Box sx={{ flex: 1 }}>
         <Stack
+          flex={1}
           direction={{ xs: "column", sm: "row" }}
           alignItems={{ sm: "center" }}
           justifyContent="space-between"
           spacing={1}
         >
-          <Typography sx={{ fontSize: 14 }}>
-            <b>Tên: </b>
-            {item.name}
+          <Typography flex={2} sx={{ fontSize: 14 }}>
+            <b>Mô tả: </b>
+            {discount.name}
           </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            <b>Giá trị:</b> {item.value}
+          <Typography flex={2} sx={{ fontSize: 14 }}>
+            <b>Giảm:</b> {discount.value}%
           </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            <b>Số lượng:</b> {item.qty}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            <b>Ngày tạo:</b> {item.createdAt}
+          <Typography flex={2} sx={{ fontSize: 14 }}>
+            <b>Mã nhập:</b> {discount.code}
           </Typography>
         </Stack>
       </Box>
@@ -48,14 +67,16 @@ const CardDiscount = ({ item, onClick }) => {
         >
           Sửa
         </Button>
-        <IconButton
-          sx={{ bgcolor: "#ffeceb", color: "#ff5a3a" }}
-          onClick={() => {
-            // TODO: Gọi API xóa
-          }}
-        >
-          <DeleteOutlineIcon />
-        </IconButton>
+        {!loading ? (
+          <IconButton
+            sx={{ bgcolor: "#ffeceb", color: "#ff5a3a" }}
+            onClick={handleDelete}
+          >
+            <DeleteOutlineIcon />
+          </IconButton>
+        ) : (
+          <LoadingCus />
+        )}
       </Stack>
     </Stack>
   );

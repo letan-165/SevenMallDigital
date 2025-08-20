@@ -11,6 +11,15 @@ const DiscountService = {
   findAllBySeller: async (sellerID): Promise<Discount[]> => {
     return await axiosClient.get(`${API_DISCOUNT}/seller/${sellerID}`);
   },
+  delete: async (discountId) => {
+    return await axiosClient.delete(`${API_DISCOUNT}/${discountId}`);
+  },
+  create: async (request: { name; code; value; createdBy }) => {
+    return await axiosClient.post(`${API_DISCOUNT}`, request);
+  },
+  update: async (discountID, request: { name; code; value; createdBy }) => {
+    return await axiosClient.patch(`${API_DISCOUNT}/${discountID}`, request);
+  },
 };
 
 export default DiscountService;

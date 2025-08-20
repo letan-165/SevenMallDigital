@@ -26,7 +26,7 @@ const NavigationBar = ({
 
     fetchData();
   }, []);
-  const isSeller = store ? true : false;
+  const isSeller = !!store;
   const menuItems =
     role === "CUSTOMER"
       ? [

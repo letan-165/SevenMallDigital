@@ -1,53 +1,31 @@
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Discount } from "../../apis/dto/Response";
+import DiscountService from "../../apis/services/DiscountService";
 import CardDiscount from "../../components/atoms/Card/CardDiscount";
 import EditDiscountDialog from "../../components/atoms/Dialogs/EditDiscountDialog";
+import LoadingCus from "../../components/atoms/LoadingCus";
 import FooterCus from "../../components/organisms/FooterCus";
 import { HeaderCustomerCus } from "../../components/organisms/HeaderCustomerCus";
 import NavigationBar from "../../components/organisms/NavigationBar";
 
-type Coupon = {
-  id: number;
-  name: string;
-  value: string;
-  qty: number;
-  createdAt: string;
-};
-
 const DiscountPage = () => {
-  const [items] = useState<Coupon[]>([
-    {
-      id: 1,
-      name: "Ưu đãi giảm giá shock",
-      value: "50%",
-      qty: 100,
-      createdAt: "12/08/2025",
-    },
-    {
-      id: 2,
-      name: "Ưu đãi giảm giá shock",
-      value: "50%",
-      qty: 100,
-      createdAt: "12/08/2025",
-    },
-    {
-      id: 3,
-      name: "Ưu đãi giảm giá shock",
-      value: "50%",
-      qty: 100,
-      createdAt: "12/08/2025",
-    },
-    {
-      id: 4,
-      name: "Ưu đãi giảm giá shock",
-      value: "50%",
-      qty: 100,
-      createdAt: "12/08/2025",
-    },
-  ]);
-
+  const userID = localStorage.getItem("userID");
   const [open, setOpen] = useState(false);
+  const [discounts, setDiscounts] = useState<Discount[]>();
+  const [discount, setDiscount] = useState<Discount>();
+  useEffect(() => {
+    const fetchStore = async () => {
+      try {
+        setDiscounts(await DiscountService.findAllBySeller(userID));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchStore();
+  }, [userID]);
+
   return (
     <Box sx={{ fontFamily: "sans-serif", bgcolor: "#fff" }}>
       <HeaderCustomerCus />
@@ -85,14 +63,29 @@ const DiscountPage = () => {
           </Stack>
 
           <Paper sx={{ p: 2, border: "1px solid grey", bgcolor: "#ffeccd" }}>
-            <Stack spacing={2}>
-              {items.map((item) => (
-                <CardDiscount item={item} onClick={() => setOpen(true)} />
-              ))}
-            </Stack>
+            {!discounts ? (
+              <LoadingCus />
+            ) : (
+              <Stack spacing={2}>
+                {discounts.map((d, i) => (
+                  <CardDiscount
+                    key={i}
+                    discount={d}
+                    onClick={() => {
+                      setDiscount(d);
+                      setOpen(true);
+                    }}
+                  />
+                ))}
+              </Stack>
+            )}
           </Paper>
 
-          <EditDiscountDialog open={open} setOpen={setOpen} />
+          <EditDiscountDialog
+            open={open}
+            setOpen={setOpen}
+            discount={discount}
+          />
         </Stack>
       </Stack>
       <FooterCus />

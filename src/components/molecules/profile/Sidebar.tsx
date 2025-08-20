@@ -24,6 +24,7 @@ export default function Sidebar({ user, activeIndex, setPage }) {
           <Typography
             variant="caption"
             color="primary"
+            onClick={() => setPage(0)}
             sx={{ cursor: "pointer" }}
           >
             ✏️ Sửa hồ sơ

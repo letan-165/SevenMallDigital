@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Paths } from "../../../Paths";
 import { Product } from "../../../apis/dto/Response";
 import ProductsService from "../../../apis/services/ProductsService";
-import { formatVND } from "../../util/formatVND";
+import { formatVND } from "../../util/FunctionCus";
 import EditProductDialog from "../Dialogs/EditProductDialog";
 import LoadingCus from "../LoadingCus";
 const ProductCard = ({

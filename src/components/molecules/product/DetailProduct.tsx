@@ -15,7 +15,7 @@ import { Product } from "../../../apis/dto/Response";
 import CartService from "../../../apis/services/CartService";
 import { ButtonLoginCus } from "../../atoms/Form/ButtonLoginCus";
 import LoadingCus from "../../atoms/LoadingCus";
-import { formatVND } from "../../util/formatVND";
+import { formatVND } from "../../util/FunctionCus";
 
 export const DetailProduct = ({ product }: { product: Product }) => {
   const [quantity, setQuantity] = useState(1);

@@ -13,13 +13,13 @@ export default function ListTextCus({
   title: string;
   value?: string;
   items?: { id: string | undefined; text: string }[];
-  onSelect?: (id: string | undefined) => void; // callback khi chọn item
+  onSelect?: (id: string | undefined) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (items && items.length > 0) {
+    if (items && items.length > 0 && selected === undefined) {
       let newSelected: string | undefined;
       let newId: string | undefined;
 
@@ -36,15 +36,10 @@ export default function ListTextCus({
         newId = items[0].id;
       }
 
-      // chỉ setSelected khi khác giá trị hiện tại
-      if (newSelected !== selected) {
-        setSelected(newSelected);
-        if (newId) {
-          onSelect?.(newId); // gọi luôn callback khi set default
-        }
-      }
+      setSelected(newSelected);
+      onSelect?.(newId);
     }
-  }, [items, value]);
+  }, [items]);
 
   const handleClick = () => {
     setOpen(!open);
@@ -53,7 +48,7 @@ export default function ListTextCus({
   const handleSelect = (item: { id: string | undefined; text: string }) => {
     setSelected(item.text);
     onSelect?.(item.id);
-    setOpen(false); // đóng lại sau khi chọn
+    setOpen(false);
   };
 
   return !items ? (

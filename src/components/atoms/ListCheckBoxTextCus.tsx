@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import LoadingCus from "../atoms/LoadingCus";
 
-export default function ListCheckBoxTestCus({ title, items }) {
+export default function ListCheckBoxTestCus({ title, items, onChange }) {
   const [checked, setChecked] = useState<string[]>([]);
 
   const handleToggle = (value) => () => {
@@ -23,6 +23,7 @@ export default function ListCheckBoxTestCus({ title, items }) {
     }
 
     setChecked(newChecked);
+    onChange?.(newChecked);
   };
 
   return !items ? (
